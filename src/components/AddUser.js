@@ -4,15 +4,16 @@ import { Link, useHistory } from "react-router-dom";
 import { Form, FormGroup, Label, Input, Button } from "reactstrap";
 
 function AddUser() {
-  const [uname, setState] = useState("");
+  const [uname, setUname] = useState({ value: "", error: "" });
   const { addUser } = useContext(GlobalContext);
   const history = useHistory();
 
   const handleSubmit = (event) => {
-    if (uname !== "") {
-      addUser(uname);
+    if (uname.value !== "") {
+      addUser(uname.value);
       history.push("/");
     } else {
+      setUname({ error: "Missing User Name" });
       event.preventDefault();
     }
   };
@@ -22,7 +23,13 @@ function AddUser() {
       <h2>Add User</h2>
       <FormGroup>
         <Label>User Name</Label>
-        <Input type="email" autoFocus onChange={(event) => setState(event.target.value)} placeholder="Enter user@example.com"></Input>
+        <Input
+          type="email"
+          autoFocus
+          onChange={(event) => setUname({ value: event.target.value, error: "" })}
+          placeholder="Enter user@example.com"
+        ></Input>
+        <span style={{ color: "red" }}>{uname.error}</span>
       </FormGroup>
       <Button type="submit" className="btn btn-success">
         Add User
