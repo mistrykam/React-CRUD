@@ -8,12 +8,20 @@ function AddUser() {
   const { addUser } = useContext(GlobalContext);
   const history = useHistory();
 
+  const isValidForm = () => {
+    if (uname.value.trim() === "" || uname.value.indexOf("@") < 0 || uname.value.indexOf(".") < 0) {
+      setUname({ error: "Missing User Name: format user@example.com" });
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = (event) => {
-    if (uname.value !== "") {
+    if (isValidForm()) {
       addUser(uname.value);
       history.push("/");
     } else {
-      setUname({ error: "Missing User Name" });
       event.preventDefault();
     }
   };
@@ -24,7 +32,7 @@ function AddUser() {
       <FormGroup>
         <Label>User Name</Label>
         <Input
-          type="email"
+          type="text"
           autoFocus
           onChange={(event) => setUname({ value: event.target.value, error: "" })}
           placeholder="Enter user@example.com"
